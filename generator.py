@@ -1,8 +1,8 @@
-import csv
 import random
 import time
+from kafka import KafkaProducer
+import json
 
-# Define the teams' batsmen and bowlers
 team_a_batsmen = [
     "Rohit Sharma",
     "Shubman Gill",
@@ -30,8 +30,12 @@ bowlers = [
     "Glenn Maxwell",
 ]
 
+producer = KafkaProducer(
+    bootstrap_servers="localhost:9092",
+    value_serializer=lambda v: json.dumps(v).encode("utf-8"),  # Serialize data to JSON
+)
 
-# Function to simulate a ball delivery with Test match characteristics
+
 def simulate_delivery(
     current_batsman,
     current_bowler,
@@ -40,9 +44,14 @@ def simulate_delivery(
     batsman_balls,
     total_boundaries,
     total_extras,
+    batting_stats,
+    bowling_stats,
 ):
     runs = random.choices([0, 1, 2, 3, 4, 6, "W"], weights=[40, 30, 15, 2, 7, 4, 2])[0]
     extras, wicket, boundaries = 0, 0, 0
+    bowling_speed = random.uniform(
+        70, 95
+    )  # simulating bowling speed between 70 and 95 mph
 
     if runs == "W":
         wicket = 1
@@ -61,6 +70,26 @@ def simulate_delivery(
     total_boundaries += boundaries
     total_extras += extras
 
+    if current_batsman not in batting_stats:
+        batting_stats[current_batsman] = {"runs": 0, "balls": 0, "boundaries": 0}
+
+    batting_stats[current_batsman]["runs"] += runs
+    batting_stats[current_batsman]["balls"] += 1
+    batting_stats[current_batsman]["boundaries"] += boundaries
+
+    if current_bowler not in bowling_stats:
+        bowling_stats[current_bowler] = {
+            "overs": 0,
+            "runs_conceded": 0,
+            "wickets": 0,
+            "bowling_speeds": [],
+        }
+
+    bowling_stats[current_bowler]["overs"] += 1 / 6
+    bowling_stats[current_bowler]["runs_conceded"] += runs
+    bowling_stats[current_bowler]["wickets"] += wicket
+    bowling_stats[current_bowler]["bowling_speeds"].append(bowling_speed)
+
     return (
         runs,
         wicket,
@@ -69,10 +98,12 @@ def simulate_delivery(
         batsman_balls,
         total_boundaries,
         total_extras,
+        batting_stats,
+        bowling_stats,
     )
 
 
-def simulate_innings(batsmen, bowlers, max_overs, csv_filename, team_name, innings_no):
+def simulate_innings(batsmen, bowlers, max_overs, team_name, innings_no):
     balls_per_over = 6
     current_total_runs, current_total_wickets, total_boundaries, total_extras = (
         0,
@@ -81,128 +112,90 @@ def simulate_innings(batsmen, bowlers, max_overs, csv_filename, team_name, innin
         0,
     )
     batsman_balls = {batsman: 0 for batsman in batsmen}
+    batting_stats = {}
+    bowling_stats = {}
     current_batsmen = [batsmen.pop(0), batsmen.pop(0)]
 
-    # Open the CSV file in append mode
-    with open(csv_filename, mode="a", newline="") as file:
-        writer = csv.DictWriter(
-            file,
-            fieldnames=[
-                "Team",
-                "Innings",
-                "Over",
-                "Ball",
-                "Runs Scored",
-                "Batsman Name",
-                "Bowler Name",
-                "Wickets",
-                "Total Runs",
-                "Total Wickets",
-                "Balls Faced by Batsman",
-                "Total Boundaries",
-                "Extras",
-            ],
-        )
+    for over in range(1, max_overs + 1):
+        current_bowler = random.choice(bowlers)
 
-        # If it's the first write (i.e., the first innings), write the header
-        if innings_no == 1:
-            writer.writeheader()
+        for ball in range(1, balls_per_over + 1):
+            if current_total_wickets == 10 or not current_batsmen:
+                return current_total_runs  # End innings if all out
 
-        for over in range(1, max_overs + 1):
-            for ball in range(1, balls_per_over + 1):
-                if current_total_wickets == 10 or not current_batsmen:
-                    return current_total_runs  # End innings if all out
+            current_batsman = random.choice(current_batsmen)
 
-                current_batsman = random.choice(current_batsmen)
-                current_bowler = random.choice(bowlers)
+            (
+                runs_scored,
+                wicket,
+                current_total_runs,
+                current_total_wickets,
+                batsman_balls,
+                total_boundaries,
+                total_extras,
+                batting_stats,
+                bowling_stats,
+            ) = simulate_delivery(
+                current_batsman,
+                current_bowler,
+                current_total_runs,
+                current_total_wickets,
+                batsman_balls,
+                total_boundaries,
+                total_extras,
+                batting_stats,
+                bowling_stats,
+            )
 
-                # Simulate the delivery
-                (
-                    runs_scored,
-                    wicket,
-                    current_total_runs,
-                    current_total_wickets,
-                    batsman_balls,
-                    total_boundaries,
-                    total_extras,
-                ) = simulate_delivery(
-                    current_batsman,
-                    current_bowler,
-                    current_total_runs,
-                    current_total_wickets,
-                    batsman_balls,
-                    total_boundaries,
-                    total_extras,
-                )
+            if wicket == 1:
+                if batsmen:
+                    new_batsman = batsmen.pop(0)
+                    current_batsmen[current_batsmen.index(current_batsman)] = (
+                        new_batsman
+                    )
+                else:
+                    current_batsmen.remove(current_batsman)
 
-                # If there's a wicket, replace the current batsman
-                if wicket == 1:
-                    if batsmen:
-                        new_batsman = batsmen.pop(0)
-                        current_batsmen[current_batsmen.index(current_batsman)] = (
-                            new_batsman
-                        )
-                    else:
-                        current_batsmen.remove(current_batsman)
+            match_update = {
+                "team": team_name,
+                "innings": innings_no,
+                "over": over,
+                "ball": ball,
+                "runs_scored": runs_scored,
+                "batsman": current_batsman,
+                "bowler": current_bowler,
+                "wickets": wicket,
+                "total_runs": current_total_runs,
+                "total_wickets": current_total_wickets,
+                "balls_faced_by_batsman": batsman_balls[current_batsman],
+                "total_boundaries": total_boundaries,
+                "extras": total_extras,
+                "batting_stats": batting_stats,  # Send the batting stats with each update
+                "bowling_stats": bowling_stats,  # Send the bowling stats with each update
+            }
 
-                # Write data for this ball to CSV after each delivery
-                writer.writerow(
-                    {
-                        "Team": team_name,
-                        "Innings": innings_no,
-                        "Over": over,
-                        "Ball": ball,
-                        "Runs Scored": runs_scored,
-                        "Batsman Name": current_batsman,
-                        "Bowler Name": current_bowler,
-                        "Wickets": wicket,
-                        "Total Runs": current_total_runs,
-                        "Total Wickets": current_total_wickets,
-                        "Balls Faced by Batsman": batsman_balls[current_batsman],
-                        "Total Boundaries": total_boundaries,
-                        "Extras": total_extras,
-                    }
-                )
+            producer.send("cricket_match_topic", value=match_update)
+            print(f"Sent: {match_update}")
 
-                # Flush the file after every write to ensure immediate update
-                file.flush()
-
-                time.sleep(1)  # Simulate real-time delivery (1 second per ball)
-
-    return current_total_runs
+            time.sleep(0.1)
 
 
-# Function to simulate a full test match with live CSV updates
 def simulate_test_match():
-    overs_per_innings = 90  # Typical length of one Test innings
-    csv_filename = "live_test_match_simulation.csv"
+    overs_per_innings = 90
 
-    # Simulate Team A's first innings
     team_a_batsmen_first = team_a_batsmen.copy()
-    team_a_1st_innings_runs = simulate_innings(
-        team_a_batsmen_first, bowlers, overs_per_innings, csv_filename, "Team A", 1
-    )
+    simulate_innings(team_a_batsmen_first, bowlers, overs_per_innings, "Team A", 1)
 
-    # Simulate Team B's first innings
     team_b_batsmen_first = team_b_batsmen.copy()
-    team_b_1st_innings_runs = simulate_innings(
-        team_b_batsmen_first, bowlers, overs_per_innings, csv_filename, "Team B", 1
-    )
+    simulate_innings(team_b_batsmen_first, bowlers, overs_per_innings, "Team B", 1)
 
-    # Simulate Team A's second innings
     team_a_batsmen_second = team_a_batsmen.copy()
-    team_a_2nd_innings_runs = simulate_innings(
-        team_a_batsmen_second, bowlers, overs_per_innings, csv_filename, "Team A", 2
-    )
+    simulate_innings(team_a_batsmen_second, bowlers, overs_per_innings, "Team A", 2)
 
-    # Simulate Team B's second innings
     team_b_batsmen_second = team_b_batsmen.copy()
-    team_b_2nd_innings_runs = simulate_innings(
-        team_b_batsmen_second, bowlers, overs_per_innings, csv_filename, "Team B", 2
-    )
+    simulate_innings(team_b_batsmen_second, bowlers, overs_per_innings, "Team B", 2)
 
-    print(f"CSV file '{csv_filename}' is being updated live with match data.")
+    print("Match simulation complete.")
 
 
-# Start the live simulation
 simulate_test_match()
