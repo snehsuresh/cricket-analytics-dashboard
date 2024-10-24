@@ -73,7 +73,8 @@ const App = () => {
     const scoreboard = d3.select("#scoreboard").selectAll("*").remove();
 
     // Create a table for the scoreboard
-    const table = scoreboard.append("table")
+    const table = d3.select("#scoreboard")
+      .append("table")
       .attr("class", "scoreboard-table");
 
     const header = table.append("thead").append("tr");
@@ -81,8 +82,7 @@ const App = () => {
       .data(["Team", "Innings", "Over", "Ball", "Runs Scored", "Batsman", "Bowler", "Total Runs", "Total Wickets"])
       .enter()
       .append("th")
-      .text(d => d)
-      .style("width", "100px"); // Set fixed width for headers
+      .text(d => d);
 
     const row = table.append("tbody").append("tr");
     row.selectAll("td")
@@ -100,8 +100,7 @@ const App = () => {
       .enter()
       .append("td")
       .attr("class", d => (d === 4 || d === 6) ? "boundary-animation" : "") // Add animation class if runs scored is a boundary
-      .text(d => d)
-      .style("width", "100px"); // Set fixed width for cells
+      .text(d => d);
 
     // Highlight boundaries
     if (matchData.runs_scored === 4 || matchData.runs_scored === 6) {
@@ -113,7 +112,7 @@ const App = () => {
   const updateBattingPerformance = () => {
     d3.select("#batting-line-graph").selectAll("*").remove();
 
-    const svgWidth = window.innerWidth; // Set full width of the page
+    const svgWidth = 600;
     const svgHeight = 400;
 
     const svg = d3.select("#batting-line-graph")
@@ -238,7 +237,7 @@ const App = () => {
   const updateBowlingPerformance = () => {
     d3.select("#bowling-bar-graph").selectAll("*").remove();
 
-    const svgWidth = window.innerWidth * 0.9; // Set full width of the page
+    const svgWidth = window.innerWidth * 0.9;
     const svgHeight = 300;
 
     const svg = d3.select("#bowling-bar-graph")
@@ -247,6 +246,7 @@ const App = () => {
       .attr("height", svgHeight);
 
     const bowlingStats = matchData.bowling_stats;
+
     const bowlersData = Object.entries(bowlingStats).map(([bowler, stats]) => {
       const economy = stats.runs_conceded / stats.overs;
       return { bowler, economy };
