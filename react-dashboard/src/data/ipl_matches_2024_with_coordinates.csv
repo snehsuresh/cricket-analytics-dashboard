@@ -1,0 +1,51 @@
+match_id,date,team1,team2,location,latitude,longitude
+1,2024-03-28,Punjab Kings,Sunrisers Hyderabad,Mumbai,19.076,72.8777
+2,2024-03-28,Chennai Super Kings,Punjab Kings,Mumbai,19.076,72.8777
+3,2024-04-18,Royal Challengers Bangalore,Chennai Super Kings,Sydney,33.8688,151.2093
+4,2024-03-27,Punjab Kings,Kolkata Knight Riders,Dubai,25.276987,55.296249
+5,2024-04-03,Sunrisers Hyderabad,Kolkata Knight Riders,Bangalore,12.9716,77.5946
+6,2024-04-18,Delhi Capitals,Royal Challengers Bangalore,Delhi,28.6139,77.209
+7,2024-04-11,Mumbai Indians,Royal Challengers Bangalore,Mumbai,19.076,72.8777
+8,2024-04-16,Chennai Super Kings,Mumbai Indians,Cape Town,-33.9249,18.4241
+9,2024-04-02,Punjab Kings,Royal Challengers Bangalore,New York,40.7128,-74.006
+10,2024-03-24,Punjab Kings,Royal Challengers Bangalore,Kolkata,22.5726,88.3639
+11,2024-03-31,Mumbai Indians,Royal Challengers Bangalore,Delhi,28.6139,77.209
+12,2024-04-10,Mumbai Indians,Royal Challengers Bangalore,Cape Town,-33.9249,18.4241
+13,2024-03-24,Punjab Kings,Rajasthan Royals,Mohali,30.7046,76.7179
+14,2024-04-01,Kolkata Knight Riders,Mumbai Indians,Mumbai,19.076,72.8777
+15,2024-03-29,Royal Challengers Bangalore,Mumbai Indians,Jaipur,26.9124,75.7873
+16,2024-04-09,Chennai Super Kings,Royal Challengers Bangalore,Sydney,33.8688,151.2093
+17,2024-04-08,Kolkata Knight Riders,Rajasthan Royals,Delhi,28.6139,77.209
+18,2024-04-19,Kolkata Knight Riders,Rajasthan Royals,Mumbai,19.076,72.8777
+19,2024-04-13,Mumbai Indians,Chennai Super Kings,Cape Town,-33.9249,18.4241
+20,2024-04-07,Royal Challengers Bangalore,Rajasthan Royals,Kolkata,22.5726,88.3639
+21,2024-03-20,Sunrisers Hyderabad,Kolkata Knight Riders,Jaipur,26.9124,75.7873
+22,2024-03-31,Rajasthan Royals,Delhi Capitals,Cape Town,-33.9249,18.4241
+23,2024-04-19,Royal Challengers Bangalore,Punjab Kings,London,51.5074,-0.1278
+24,2024-04-01,Sunrisers Hyderabad,Kolkata Knight Riders,Chennai,13.0827,80.2707
+25,2024-04-03,Royal Challengers Bangalore,Punjab Kings,Chennai,13.0827,80.2707
+26,2024-03-25,Kolkata Knight Riders,Chennai Super Kings,Hyderabad,17.385,78.4867
+27,2024-03-20,Punjab Kings,Delhi Capitals,New York,40.7128,-74.006
+28,2024-04-11,Delhi Capitals,Rajasthan Royals,Sydney,33.8688,151.2093
+29,2024-04-18,Royal Challengers Bangalore,Punjab Kings,Hyderabad,17.385,78.4867
+30,2024-04-05,Chennai Super Kings,Punjab Kings,Dubai,25.276987,55.296249
+31,2024-04-06,Rajasthan Royals,Chennai Super Kings,Dubai,25.276987,55.296249
+32,2024-04-08,Delhi Capitals,Chennai Super Kings,New York,40.7128,-74.006
+33,2024-03-20,Chennai Super Kings,Sunrisers Hyderabad,Kolkata,22.5726,88.3639
+34,2024-03-24,Chennai Super Kings,Kolkata Knight Riders,Bangalore,12.9716,77.5946
+35,2024-03-23,Sunrisers Hyderabad,Mumbai Indians,Kolkata,22.5726,88.3639
+36,2024-04-11,Kolkata Knight Riders,Delhi Capitals,Chennai,13.0827,80.2707
+37,2024-04-13,Kolkata Knight Riders,Delhi Capitals,Mohali,30.7046,76.7179
+38,2024-03-28,Sunrisers Hyderabad,Kolkata Knight Riders,Kolkata,22.5726,88.3639
+39,2024-04-12,Chennai Super Kings,Delhi Capitals,London,51.5074,-0.1278
+40,2024-03-28,Royal Challengers Bangalore,Chennai Super Kings,Mumbai,19.076,72.8777
+41,2024-03-26,Mumbai Indians,Rajasthan Royals,Chennai,13.0827,80.2707
+42,2024-03-27,Sunrisers Hyderabad,Chennai Super Kings,Dubai,25.276987,55.296249
+43,2024-03-28,Rajasthan Royals,Mumbai Indians,London,51.5074,-0.1278
+44,2024-03-31,Mumbai Indians,Punjab Kings,Delhi,28.6139,77.209
+45,2024-04-02,Sunrisers Hyderabad,Chennai Super Kings,Delhi,28.6139,77.209
+46,2024-03-29,Rajasthan Royals,Punjab Kings,Dubai,25.276987,55.296249
+47,2024-04-03,Royal Challengers Bangalore,Sunrisers Hyderabad,Mumbai,19.076,72.8777
+48,2024-04-08,Chennai Super Kings,Kolkata Knight Riders,Mohali,30.7046,76.7179
+49,2024-04-10,Royal Challengers Bangalore,Kolkata Knight Riders,Chennai,13.0827,80.2707
+50,2024-03-23,Kolkata Knight Riders,Sunrisers Hyderabad,Kolkata,22.5726,88.3639
