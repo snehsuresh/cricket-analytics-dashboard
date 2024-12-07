@@ -70,13 +70,19 @@ Ensure Kafka is running on localhost:9092.
 kafka-topics --create --topic cricket_match_topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
 ```
 ## Running the Project
-
-### 1. Up the docker container (Match Simulator)
+### 1. Installing dependencies
+Note. Install dependencies in 
+1.react-dashboard/backend
+2.react-dashboard/
+```bash
+npm i
+```
+### 2. Up the docker container (Match Simulator)
 ```bash
 docker compose up -d
 ```
 
-### 2. Start the Kafka Producer (Match Simulator)
+### 3. Start the Kafka Producer (Match Simulator)
 
 1. Navigate to the match-simulator directory:
 2. Run the simulator:
@@ -84,7 +90,7 @@ docker compose up -d
 python generator.py
 ```
 
-### 3. Start the Backend Server
+### 4. Start the Backend Server
 1. Navigate to the backend directory:
 ```bash
 cd backend
@@ -94,7 +100,7 @@ cd backend
 ```bash
 node server.js
 ```
-### 4. Start the Frontend
+### 5. Start the Frontend
 1. Navigate to the frontend directory:
 
 2. Start the React app:
