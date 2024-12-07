@@ -104,18 +104,20 @@ npm start
 
 ## Project Structure
 ```bash
-|-- backend/
-|   |-- server.js       # Node.js server handling WebSockets and Kafka consumer
-|   |-- package.json    # Backend dependencies
+|-- react-dashboard/
+|   |-- backend/
+|   |   |-- server.js       # Node.js server handling WebSockets and Kafka consumer
+|   |   |-- package.json    # Backend dependencies
 |
-|-- frontend/
-|   |-- src/
-|       |-- App.js       # Main React app entry
-|       |-- components/  # React components (Scoreboard, Graphs, etc.)
+|
+|-- src/
+|   |-- data/
+|   |-- App.js       # Main React app entry
+|   |-- components/  # React components (Scoreboard, Graphs, etc.)
 |   |-- package.json     # Frontend dependencies
 |
-|-- match-simulator/
-|   |-- simulate_match.py  # Match simulation code
+|
+|-- generator.py  # Match simulation code
 |
 |-- data/
 |   |-- ipl_matches_2024_with_coordinates.csv  # Match data
