@@ -118,9 +118,7 @@ npm start
 |
 |
 |-- generator.py  # Match simulation code
-|
-|-- data/
-|   |-- ipl_matches_2024_with_coordinates.csv  # Match data
+|-- docker-compose.yaml # Docker config (IMPORTANT)
 ```
 
 ## Notes
